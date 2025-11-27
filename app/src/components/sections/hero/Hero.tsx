@@ -4,11 +4,11 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import ScrollIndicator from '@/app/src/components/ui/ScrollIndicator';
-import { FaBuilding, FaRocket, FaStore, FaCloud, FaLaptop, FaShoppingBag, FaFacebook, FaPlay, FaMusic } from 'react-icons/fa';
+import { FaBuilding, FaRocket, FaStore, FaCloud, FaLaptop } from 'react-icons/fa';
 
 export default function Hero() {
   const [checkWorkHovered, setCheckWorkHovered] = useState(false);
-  const [losAngelesHovered, setLosAngelesHovered] = useState(false);
+  const [lahoreHovered, setLahoreHovered] = useState(false);
   const [socialHovered, setSocialHovered] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -39,7 +39,7 @@ export default function Hero() {
   });
 
   // Transform scroll progress for button animations
-  const losAngelesY = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
+  const lahoreY = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
   const checkWorkY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
   const socialY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
   const scrollIndicatorY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
@@ -60,11 +60,20 @@ export default function Hero() {
     }
   }, [isScrolling, floatingY]);
 
+  const marqueeItems = [
+    { icon: FaBuilding, label: 'ROYAL SWIFT SERVICES' },
+    { icon: FaRocket, label: 'BEST DEAL MARKETING' },
+    { icon: FaStore, label: 'AL HAMAD DEVELOPERS' },
+    { icon: FaCloud, label: 'AYYAN DEVELOPER' },
+    { icon: FaLaptop, label: 'GLOBAL ECO GROUP' },
+    { icon: FaBuilding, label: 'FORMAN CHRISTIAN COLLEGE' },
+  ];
+
   return (
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-8 pt-32 md:pt-20 pb-12 overflow-x-hidden overflow-y-hidden bg-[#f5f5f5]"
+      className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 pt-24 sm:pt-28 md:pt-20 pb-8 sm:pb-10 md:pb-12 overflow-x-hidden overflow-y-hidden bg-[#f5f5f5]"
     >
       {/* 3D Plus Sign - Top Left with bounce animation only - moved closer to center */}
       <motion.div
@@ -94,7 +103,7 @@ export default function Hero() {
         />
       </motion.div>
 
-      {/* 3D Map Pin with Los Angeles Button - Left Side - moved closer to center */}
+      {/* 3D Map Pin with Lahore Button - Left Side - moved closer to center */}
       <motion.div
         initial={{ opacity: 0, y: -100, scale: 0.5 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -107,7 +116,7 @@ export default function Hero() {
         }}
         className="hidden md:block absolute left-[10%] md:left-[13%] lg:left-[10%] bottom-32 md:bottom-40 z-10"
       >
-        <div className="flex flex-col items-center gap-6">
+        <div className="relative flex flex-col items-center">
           {/* Map Pin Image */}
           <motion.div
             animate={{ y: [0, -10, 0] }}
@@ -125,27 +134,33 @@ export default function Hero() {
             />
           </motion.div>
 
-          {/* Los Angeles Button - Below Map Pin - Shows time on hover with scroll animation */}
+          {/* Lahore Button - anchored to pin center */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            style={{ y: losAngelesY }}
+            style={{ y: lahoreY }}
             transition={{ duration: 0.8, delay: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="px-6 py-3 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-black transition-colors shadow-lg min-w-[140px]"
+            className="absolute top-[105%] left-1/2 -translate-x-1/2 px-6 py-3 rounded-full bg-[#1a1a1a] text-white text-sm font-medium hover:bg-black transition-colors shadow-lg min-w-[140px]"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onMouseEnter={() => setLosAngelesHovered(true)}
-            onMouseLeave={() => setLosAngelesHovered(false)}
+            onMouseEnter={() => setLahoreHovered(true)}
+            onMouseLeave={() => setLahoreHovered(false)}
           >
             <AnimatePresence mode="wait">
               <motion.span
-                key={losAngelesHovered ? 'time' : 'location'}
+                key={lahoreHovered ? 'time' : 'location'}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
                 transition={{ duration: 0.2 }}
               >
-                {losAngelesHovered ? new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', minute: '2-digit' }) : 'Los Angeles'}
+                {lahoreHovered
+                  ? new Date().toLocaleTimeString('en-US', {
+                      timeZone: 'Asia/Karachi',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : 'Lahore'}
               </motion.span>
             </AnimatePresence>
           </motion.button>
@@ -212,43 +227,43 @@ export default function Hero() {
       </motion.div>
 
       {/* Main Content - Center */}
-      <div className="relative z-10 text-center max-w-5xl mx-auto">
+      <div className="relative z-10 text-center max-w-5xl mx-auto w-full px-2 sm:px-0">
         {/* Profile Picture */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="flex flex-col items-center mb-8"
+          className="flex flex-col items-center mb-6 sm:mb-8"
         >
           <motion.div
-            className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-4 bg-gray-200 shadow-xl ring-4 ring-white"
+            className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-3 sm:mb-4 bg-gray-200 shadow-xl ring-2 sm:ring-4 ring-white"
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ duration: 0.3 }}
           >
             <Image
-              src="/assets/images/user.png"
-              alt="Roy Jones"
+              src="/assets/images/abd.png"
+              alt="Abdul Rehman"
               width={128}
               height={128}
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full object-cover object-top rounded-full"
               priority
             />
           </motion.div>
           <motion.h2
-            className="text-2xl md:text-3xl font-bold text-black mb-1 tracking-tight"
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-1 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
-            Roy Jones
+            Abdul Rehman
           </motion.h2>
           <motion.p
-            className="text-base md:text-lg text-gray-500 font-medium"
+            className="text-sm sm:text-base md:text-lg text-gray-500 font-medium px-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            Product designer
+            Property developer & export operator
           </motion.p>
         </motion.div>
 
@@ -257,21 +272,31 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-black leading-[1.1] mb-12 px-4 tracking-tight"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold text-black leading-tight sm:leading-snug mb-6 sm:mb-8 tracking-tight break-words hyphens-auto"
         >
-          Creating intuitive, user-focused digital experiences.
+          Lahore developer & export operator delivering trusted property, logistics, and environmental programs.
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.85, ease: [0.43, 0.13, 0.23, 0.96] }}
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-12 leading-relaxed"
+        >
+          I lead Royal Swift Services, Best Deal Marketing, Al Hamad Developers, Ayyan Developer, and Global Eco Group to
+          move capital, land, and ESG mandates from Lahore to Dubai with transparent reporting and on-ground delivery.
+        </motion.p>
 
         {/* Let's talk Button - Center Below Headline */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.9, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="flex justify-center mb-16"
+          className="flex justify-center mb-12 sm:mb-14 md:mb-16"
         >
           <motion.a
             href="#contact"
-            className="px-10 py-4 rounded-full bg-[#FF4D4D] text-white text-lg font-medium hover:bg-[#FF3333] transition-colors shadow-xl shadow-red-200"
+            className="px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 rounded-full bg-[#FF4D4D] text-white text-base sm:text-lg font-medium hover:bg-[#FF3333] transition-colors shadow-xl shadow-red-200"
             whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255, 77, 77, 0.4)" }}
             whileTap={{ scale: 0.95 }}
           >
@@ -284,117 +309,25 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1, ease: [0.43, 0.13, 0.23, 0.96] }}
-          className="relative w-full mt-12 md:mt-16 lg:mt-20"
+          className="relative w-full mt-8 sm:mt-10 md:mt-12 lg:mt-16 xl:mt-20"
         >
           <div className="relative overflow-hidden mx-auto max-w-4xl">
-            {/* Left blur gradient - exit point */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 bg-gradient-to-r from-[#f5f5f5] via-[#f5f5f5]/80 to-transparent z-10 pointer-events-none"></div>
-            
-            {/* Right blur gradient - entry point */}
-            <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 bg-gradient-to-l from-[#f5f5f5] via-[#f5f5f5]/80 to-transparent z-10 pointer-events-none"></div>
-            
-            <motion.div
-              className="flex items-center gap-8 md:gap-12 whitespace-nowrap"
-              animate={{
-                x: ['100%', '-100%']
-              }}
-              transition={{
-                x: {
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: 'linear',
-                  repeatType: 'loop'
-                }
-              }}
-            >
-              {/* Company names set - multiple companies for variety */}
-              <div className="flex items-center gap-8 md:gap-12">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaBuilding className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide uppercase">FOXHUB</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaRocket className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide lowercase">treva</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaStore className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide lowercase">amara</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaCloud className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Google</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaLaptop className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Microsoft</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaBuilding className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Apple</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaShoppingBag className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Amazon</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaFacebook className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Meta</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaPlay className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Netflix</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaMusic className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Spotify</span>
-                </div>
-              </div>
-              
-              {/* Duplicate set for seamless loop */}
-              <div className="flex items-center gap-8 md:gap-12">
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaBuilding className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide uppercase">FOXHUB</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaRocket className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide lowercase">treva</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaStore className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide lowercase">amara</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaCloud className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Google</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaLaptop className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Microsoft</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaBuilding className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Apple</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaShoppingBag className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Amazon</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaFacebook className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Meta</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaPlay className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Netflix</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <FaMusic className="text-gray-600 text-lg md:text-xl" />
-                  <span className="text-gray-700 text-base md:text-lg font-semibold tracking-wide">Spotify</span>
-                </div>
-              </div>
-            </motion.div>
+            <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 lg:w-48 bg-gradient-to-r from-[#f5f5f5] via-[#f5f5f5]/80 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 md:w-32 lg:w-48 bg-gradient-to-l from-[#f5f5f5] via-[#f5f5f5]/80 to-transparent z-10 pointer-events-none"></div>
+
+            <div className="flex items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 whitespace-nowrap marquee-track">
+              {[...marqueeItems, ...marqueeItems].map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div key={`${item.label}-${idx}`} className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
+                    <Icon className="text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl" />
+                    <span className="text-gray-700 text-xs sm:text-sm md:text-base lg:text-lg font-semibold tracking-wide uppercase">
+                      {item.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </motion.div>
       </div>

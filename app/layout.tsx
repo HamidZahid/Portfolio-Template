@@ -25,8 +25,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Roy Jones - Product Designer",
-  description: "Creating intuitive, user-focused digital experiences. Product designer with a background in computer science.",
+  title: "Abdul Rehman - Product Designer",
+  description:
+    "Creating intuitive, user-focused digital experiences. Abdul Rehman blends design intuition with technical rigor to craft delightful products.",
 };
 
 export default function RootLayout({

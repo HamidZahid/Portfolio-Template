@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { staggerContainer } from '@/app/src/utils/animations';
 
 export default function Contact() {
   const [isScrolling, setIsScrolling] = useState(false);
+  const [lahoreHovered, setLahoreHovered] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   // Scroll detection for floating animation
@@ -35,7 +36,7 @@ export default function Contact() {
   });
 
   // Transform scroll progress for button animations
-  const losAngelesY = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
+  const lahoreY = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
   const dropFollowY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
   const goHomeY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
   
@@ -101,39 +102,56 @@ export default function Contact() {
           stiffness: 100,
           damping: 12
         }}
-        className="hidden md:block absolute left-[15%] md:left-[18%] lg:left-[20%] bottom-32 md:bottom-40 w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 z-10"
+        className="hidden md:block absolute left-[15%] md:left-[18%] lg:left-[20%] bottom-32 md:bottom-40 z-10"
       >
-        <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Image
-            src="/assets/images/hero_2.png"
-            alt="Map pin"
-            width={224}
-            height={224}
-            className="w-full h-full object-contain opacity-80"
-            unoptimized
-          />
-        </motion.div>
-      </motion.div>
+        <div className="relative flex flex-col items-center">
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56"
+          >
+            <Image
+              src="/assets/images/hero_2.png"
+              alt="Map pin"
+              width={224}
+              height={224}
+              className="w-full h-full object-contain opacity-80"
+              unoptimized
+            />
+          </motion.div>
 
-      {/* Los Angeles Button - Bottom Left - moved closer to center with scroll animation */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        style={{ y: losAngelesY }}
-        transition={{ duration: 0.8, delay: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="hidden md:block absolute left-[15%] md:left-[18%] lg:left-[20%] bottom-16 md:bottom-24 z-20"
-      >
-        <motion.button
-          className="px-5 py-2.5 rounded-full bg-[#3d4149] text-white text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg"
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)" }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Los Angeles
-        </motion.button>
+          {/* Lahore Button - centered below pin */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{ y: lahoreY }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+            className="absolute top-[105%] left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-[#3d4149] text-white text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg min-w-[140px]"
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)" }}
+            whileTap={{ scale: 0.95 }}
+            onMouseEnter={() => setLahoreHovered(true)}
+            onMouseLeave={() => setLahoreHovered(false)}
+          >
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={lahoreHovered ? 'lahore-time' : 'lahore-label'}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                {lahoreHovered
+                  ? new Date().toLocaleTimeString('en-US', {
+                      timeZone: 'Asia/Karachi',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : 'Lahore'}
+              </motion.span>
+            </AnimatePresence>
+          </motion.button>
+        </div>
       </motion.div>
 
       {/* Available for work - Top Right - moved closer to center */}
@@ -224,18 +242,41 @@ export default function Contact() {
         transition={{ duration: 0.8, delay: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
         className="hidden md:block absolute bottom-16 md:bottom-24 right-[15%] md:right-[18%] lg:right-[20%] z-20"
       >
-        <motion.a
-          href="#hero"
-          className="px-6 py-3 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors shadow-lg inline-flex items-center gap-2"
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.4)" }}
-          whileTap={{ scale: 0.95 }}
-          onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        >
-          Go home
-        </motion.a>
+        <div className="relative">
+          <motion.a
+            href="#hero"
+            className="px-6 py-3 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors shadow-lg inline-flex items-center gap-2"
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.4)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
+            Go home
+          </motion.a>
+
+          {/* Floating Arrow Cursor with Animation */}
+          <motion.div 
+            className="absolute -top-6 -right-6 w-8 h-8 pointer-events-none"
+            animate={{ 
+              x: [0, 5, 0],
+              y: [0, -3, 0]
+            }}
+            transition={{ 
+              x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+              y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+            }}
+          >
+            <Image
+              src="/assets/images/hero_1.png"
+              alt="Cursor"
+              width={32}
+              height={32}
+              className="w-full h-full object-contain drop-shadow-md"
+            />
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Main Content - Center with stagger animation */}
@@ -253,7 +294,7 @@ export default function Contact() {
             transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-8"
           >
-            Let&apos;s create something great together.
+            Let&apos;s build your next development or export corridor.
           </motion.h2>
 
           <motion.p
@@ -263,9 +304,8 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto"
           >
-            I&apos;m not just here to design products;
-            <br />
-            I&apos;m here to connect with people.
+            From Lahore housing colonies to GCC-ready export lanes and environmental programs, I coordinate the
+            partners, approvals, and compliance that keep deals moving. Reach out any time at abrehmanewm@gmail.com.
           </motion.p>
 
           <motion.div
@@ -276,7 +316,7 @@ export default function Contact() {
             className="flex justify-center"
           >
             <motion.a
-              href="mailto:contact@example.com"
+              href="mailto:abrehmanewm@gmail.com"
               className="px-12 py-5 rounded-full bg-white text-black text-lg font-semibold hover:bg-gray-100 transition-colors shadow-2xl"
               whileHover={{
                 scale: 1.08,
@@ -284,7 +324,7 @@ export default function Contact() {
               }}
               whileTap={{ scale: 0.95 }}
             >
-              Let&apos;s talk!
+              Email Abdul
             </motion.a>
           </motion.div>
         </motion.div>

@@ -34,7 +34,7 @@ export default function Header() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Roy Jones
+            Abdul Rehman
           </motion.a>
 
           {/* Desktop Navigation - centered, hidden when scrolled */}

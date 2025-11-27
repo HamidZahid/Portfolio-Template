@@ -21,11 +21,11 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
       whileInView="visible"
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="border-b border-gray-200 last:border-0 hover:bg-gray-50/50 transition-colors duration-200"
+      className="hover:bg-gray-50/50 transition-colors duration-200"
     >
-      <div className="py-8 md:py-10">
+      <div className="py-5 md:py-6">
         {/* Main Row - 4 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_200px_auto] gap-4 md:gap-8 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_200px_auto] gap-3 md:gap-6 items-center">
           {/* Column 1: Year Range */}
           <div className="text-gray-500 text-sm md:text-base font-normal order-1">
             {experience.startDate} — {experience.endDate}
@@ -82,21 +82,21 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
               transition={{ duration: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
               className="overflow-hidden"
             >
-              <div className="pt-8 grid grid-cols-1 md:grid-cols-[200px_1fr_200px_auto] gap-4 md:gap-8">
+              <div className="pt-5 grid grid-cols-1 md:grid-cols-[200px_1fr_200px_auto] gap-3 md:gap-6">
                 {/* Empty first column */}
                 <div></div>
 
                 {/* Content in second and third columns */}
                 <div className="md:col-span-2">
-                  <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-6">
+                  <p className="text-gray-600 text-base md:text-lg leading-relaxed mb-4">
                     {experience.description}
                   </p>
                   {experience.responsibilities && experience.responsibilities.length > 0 && (
                     <div>
-                      <h4 className="text-gray-900 font-medium text-base md:text-lg mb-3">
+                      <h4 className="text-gray-900 font-medium text-base md:text-lg mb-2">
                         Key Responsibilities:
                       </h4>
-                      <ul className="space-y-2 text-gray-600 text-base md:text-lg">
+                      <ul className="space-y-1.5 text-gray-600 text-base md:text-lg">
                         {experience.responsibilities.map((responsibility, idx) => (
                           <li key={idx} className="flex items-start gap-3">
                             <span className="text-gray-400 mt-1.5">•</span>

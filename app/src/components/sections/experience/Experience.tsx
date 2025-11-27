@@ -16,7 +16,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="py-20 md:py-32 px-4 md:px-6 lg:px-8 bg-white"
+      className="py-12 md:py-16 lg:py-20 px-4 md:px-6 lg:px-8 bg-white"
     >
       <div className="container mx-auto max-w-6xl">
         <motion.div
@@ -24,7 +24,7 @@ export default function Experience() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
-          className="mb-16 md:mb-20"
+          className="mb-8 md:mb-10"
         >
           <motion.h2
             variants={fadeInUp}
@@ -39,9 +39,9 @@ export default function Experience() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="bg-[#fafafa] rounded-3xl p-8 md:p-12 lg:p-16"
+          className="bg-[#fafafa] rounded-3xl p-6 md:p-8 lg:p-10"
         >
-          <div className="space-y-0">
+          <div className="divide-y divide-gray-200">
             {experiences.map((experience, index) => (
               <ScrollAnimation key={experience.id} delay={index * 0.1}>
                 <ExperienceCard
@@ -53,10 +53,10 @@ export default function Experience() {
           </div>
 
           {/* Download CV Button */}
-          <div className="flex justify-center mt-12 md:mt-16">
+          <div className="flex justify-center mt-8 md:mt-10">
             <motion.button
               onClick={handleDownloadCV}
-              className="px-10 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 text-base md:text-lg font-medium shadow-lg hover:shadow-xl"
+              className="px-8 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 text-base md:text-lg font-medium shadow-lg hover:shadow-xl"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
