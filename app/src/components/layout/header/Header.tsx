@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Nav from '../navigation/Nav';
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,15 +22,14 @@ export default function Header() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
-        }`}
+      className="fixed top-0 left-0 right-0 z-50 bg-transparent"
     >
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-10 lg:px-16">
-        <div className="flex items-center justify-between h-16 md:h-20 lg:h-24 relative mt-4 md:mt-6">
-          {/* Roy Jones - Left with spacing */}
+      <div className="w-full px-4 sm:px-6 md:px-8 lg:px-12">
+        <div className="flex items-center justify-between h-16 md:h-20 gap-4">
+          {/* Brand - anchored left */}
           <motion.a
             href="/"
-            className="text-3xl md:text-4xl lg:text-5xl font-semibold text-black z-10 ml-4 md:ml-6"
+            className="text-3xl md:text-4xl font-semibold text-black flex-shrink-0"
             style={{ fontFamily: 'var(--font-dancing-script)' }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -38,14 +37,17 @@ export default function Header() {
             Roy Jones
           </motion.a>
 
-          {/* Desktop Navigation - Only show when not scrolled */}
-          <div className={`hidden md:flex items-center gap-4 absolute left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300 ${isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
-            }`}>
+          {/* Desktop Navigation - centered, hidden when scrolled */}
+          <div
+            className={`hidden md:flex flex-1 justify-center transition-opacity duration-300 ${
+              isScrolled ? 'opacity-0 pointer-events-none' : 'opacity-100'
+            }`}
+          >
             <Nav />
           </div>
 
-          {/* Let's connect Button - Right with spacing */}
-          <div className="hidden md:block z-10 mr-4 md:mr-6">
+          {/* Let's connect Button - right aligned */}
+          <div className="hidden md:flex justify-end flex-shrink-0">
             <motion.a
               href="#contact"
               className="px-6 md:px-8 py-2.5 md:py-3 rounded-full bg-black text-white text-sm md:text-base font-medium hover:bg-gray-800 transition-colors"
@@ -58,7 +60,7 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden flex flex-col gap-1.5 z-50"
+            className="md:hidden flex flex-col gap-1.5 ml-auto"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >

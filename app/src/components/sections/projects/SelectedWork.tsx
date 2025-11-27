@@ -68,16 +68,18 @@ export default function SelectedWork() {
             </ScrollAnimation>
           </div>
 
-          {/* Second row: 8 grid + 4 grid */}
-          <div className="col-span-12 md:col-span-8">
-            <ScrollAnimation delay={0.3}>
-              <ProjectCard project={projects[2]} index={2} />
-            </ScrollAnimation>
-          </div>
+          {/* Second row: 4 grid + 8 grid (content swapped) */}
           {projects[3] && (
             <div className="col-span-12 md:col-span-4">
-              <ScrollAnimation delay={0.4}>
+              <ScrollAnimation delay={0.3}>
                 <ProjectCard project={projects[3]} index={3} />
+              </ScrollAnimation>
+            </div>
+          )}
+          {projects[2] && (
+            <div className="col-span-12 md:col-span-8">
+              <ScrollAnimation delay={0.4}>
+                <ProjectCard project={projects[2]} index={2} />
               </ScrollAnimation>
             </div>
           )}

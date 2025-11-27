@@ -31,7 +31,7 @@ export default function Testimonials() {
         </motion.div>
 
         {/* Cards container with scroll space - reduced height for faster animation */}
-        <div ref={containerRef} className="relative" style={{ height: '200vh' }}>
+        <div ref={containerRef} className="relative" style={{ height: '80vh' }}>
           <div className="sticky top-20 w-full h-[600px] md:h-[700px]">
             {testimonials.map((testimonial, index) => (
               <TestimonialCard

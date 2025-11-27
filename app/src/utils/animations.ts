@@ -1,7 +1,8 @@
 import { Variants } from 'framer-motion';
 
-// Smooth easing curve matching Framer's default
+// Smooth easing curves for natural motion
 export const smoothEase = [0.43, 0.13, 0.23, 0.96];
+export const framerEase = [0.22, 1, 0.36, 1]; // Framer-style ease for scroll animations
 
 export const transition = {
   duration: 0.8,
@@ -11,6 +12,11 @@ export const transition = {
 export const transitionFast = {
   duration: 0.4,
   ease: smoothEase,
+};
+
+export const transitionSmooth = {
+  duration: 1.2,
+  ease: framerEase,
 };
 
 export const fadeInUp: Variants = {

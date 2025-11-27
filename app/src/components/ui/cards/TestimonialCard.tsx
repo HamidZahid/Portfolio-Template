@@ -8,7 +8,7 @@ import { RefObject } from 'react';
 interface TestimonialCardProps {
   testimonial: Testimonial;
   index: number;
-  containerRef: RefObject<HTMLDivElement>;
+  containerRef: RefObject<HTMLDivElement | null>;
 }
 
 export default function TestimonialCard({ testimonial, index, containerRef }: TestimonialCardProps) {

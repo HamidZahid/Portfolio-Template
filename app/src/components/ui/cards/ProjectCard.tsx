@@ -10,6 +10,11 @@ interface ProjectCardProps {
   index: number;
 }
 
+const imageHoverVariants = {
+  rest: { scale: 1 },
+  hover: { scale: 1.05 },
+};
+
 export default function ProjectCard({ project, index }: ProjectCardProps) {
   const ref = useRef(null);
   
@@ -29,7 +34,9 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       ref={ref}
       style={{ opacity, scale }}
       className="group cursor-pointer h-full"
-      whileHover={{ y: -8 }}
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
       transition={{ duration: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
     >
       <div className="relative overflow-hidden rounded-[24px] md:rounded-[32px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-500 h-full">
@@ -40,6 +47,8 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           <motion.div
             style={{ y }}
             className="absolute inset-0 w-full h-full"
+            variants={imageHoverVariants}
+            transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
           >
             <Image
               src={project.image}
@@ -52,7 +61,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           </motion.div>
           
           {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
           
           {/* Text overlay on image */}
           <motion.div

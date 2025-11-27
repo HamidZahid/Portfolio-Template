@@ -1,11 +1,13 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import type { MotionValue } from 'framer-motion';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 export default function About() {
   const textRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // Scroll progress for text animation
   const { scrollYProgress } = useScroll({
@@ -14,7 +16,27 @@ export default function About() {
   });
 
   const text = "I am a product designer with a background in computer science, blending design intuition with technical problem-solving to create seamless, user-friendly digital experiences.";
-  const words = text.split(" ");
+  const words = useMemo(() => text.split(" "), [text]);
+  const easeCurve: [number, number, number, number] = [0.43, 0.13, 0.23, 0.96];
+
+  const fadeUpInitial = prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 };
+  const fadeUpWhileInView = { opacity: 1, y: 0 };
+  const fadeUpTransition = { duration: 0.8, ease: easeCurve };
+
+  const badgesContainerVariants = useMemo(() => ({
+    hidden: { opacity: prefersReducedMotion ? 1 : 0 },
+    visible: {
+      opacity: 1,
+      transition: prefersReducedMotion
+        ? undefined
+        : { staggerChildren: 0.1, when: "beforeChildren" }
+    }
+  }), [prefersReducedMotion]);
+
+  const badgeVariants = useMemo(() => ({
+    hidden: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+  }), [prefersReducedMotion]);
 
   return (
     <section
@@ -26,10 +48,10 @@ export default function About() {
         <div className="flex flex-col items-center text-center">
           {/* Profile Image with Name Card */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={fadeUpInitial}
+            whileInView={fadeUpWhileInView}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
+            transition={fadeUpTransition}
             className="relative mb-16"
           >
             <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden shadow-xl ring-4 ring-white mx-auto">
@@ -44,10 +66,10 @@ export default function About() {
 
             {/* Name Card Below Image */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+              transition={{ delay: prefersReducedMotion ? 0 : 0.3, duration: 0.6, ease: easeCurve }}
               className="mt-6 bg-white px-6 py-3 rounded-2xl shadow-lg inline-block"
             >
               <p className="text-base font-semibold text-black">Roy Jones</p>
@@ -60,54 +82,58 @@ export default function About() {
             ref={textRef}
             className="text-3xl md:text-4xl lg:text-5xl font-normal text-black leading-tight mb-12 max-w-3xl"
           >
-            {words.map((word, index) => {
-              const start = index / words.length;
-              const end = start + (1 / words.length);
+            {prefersReducedMotion ? (
+              <p>{text}</p>
+            ) : (
+              words.map((word, index) => {
+                const start = index / words.length;
+                const end = start + (1 / words.length);
 
-              return (
-                <motion.span
-                  key={index}
-                  style={{
-                    opacity: useTransform(scrollYProgress, [start, end], [0.3, 1]),
-                  }}
-                  className="inline-block mr-[0.25em]"
-                >
-                  {word}
-                </motion.span>
-              );
-            })}
+                return (
+                  <AnimatedWord
+                    key={`${word}-${index}`}
+                    word={word}
+                    start={start}
+                    end={end}
+                    progress={scrollYProgress}
+                  />
+                );
+              })
+            )}
           </div>
 
           {/* Let's talk! Button */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={fadeUpInitial}
+            whileInView={fadeUpWhileInView}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
+            transition={{ ...fadeUpTransition, delay: prefersReducedMotion ? 0 : 0.3 }}
             className="mb-16"
           >
             <motion.a
               href="#contact"
-              className="inline-block px-10 py-4 rounded-full bg-[#FF6B6B] text-white text-lg font-medium hover:bg-[#FF5252] transition-colors shadow-lg"
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(255, 107, 107, 0.3)" }}
-              whileTap={{ scale: 0.95 }}
+              aria-label="Jump to contact section"
+              className="inline-block px-10 py-4 rounded-full bg-[#FF6B6B] text-white text-lg font-medium hover:bg-[#FF5252] transition-colors shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF6B6B]"
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.05, boxShadow: "0 20px 40px rgba(255, 107, 107, 0.3)" }}
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
             >
-              Let's talk!
+              Let&apos;s talk!
             </motion.a>
           </motion.div>
 
           {/* Info Badges */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, delay: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="flex flex-wrap justify-center gap-4 md:gap-6"
+            variants={badgesContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
           >
             {/* Badge 1 */}
             <motion.div
-              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
+              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-200"
+              variants={badgeVariants}
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
               transition={{ duration: 0.2 }}
             >
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,8 +144,9 @@ export default function About() {
 
             {/* Badge 2 */}
             <motion.div
-              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
+              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-200"
+              variants={badgeVariants}
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
               transition={{ duration: 0.2 }}
             >
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,8 +157,9 @@ export default function About() {
 
             {/* Badge 3 */}
             <motion.div
-              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
+              className="flex items-center gap-2 px-5 py-3 bg-white rounded-full shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-200"
+              variants={badgeVariants}
+              whileHover={prefersReducedMotion ? undefined : { scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)" }}
               transition={{ duration: 0.2 }}
             >
               <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,5 +172,22 @@ export default function About() {
         </div>
       </div>
     </section>
+  );
+}
+
+type AnimatedWordProps = {
+  word: string;
+  start: number;
+  end: number;
+  progress: MotionValue<number>;
+};
+
+function AnimatedWord({ word, start, end, progress }: AnimatedWordProps) {
+  const opacity = useTransform(progress, [start, end], [0.3, 1]);
+
+  return (
+    <motion.span style={{ opacity }} className="inline-block mr-[0.25em]">
+      {word}
+    </motion.span>
   );
 }
