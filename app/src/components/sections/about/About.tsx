@@ -61,6 +61,7 @@ export default function About() {
                 alt="Abdul Rehman"
                 fill
                 className="object-cover object-top"
+                sizes="(max-width: 768px) 96px, 128px"
                 priority
               />
             </div>

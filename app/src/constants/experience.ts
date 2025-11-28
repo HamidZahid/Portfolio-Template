@@ -4,7 +4,7 @@ export const experiences: Experience[] = [
   {
     id: 'royal-swift',
     title: 'Owner',
-    company: 'Royal Swift Services Private Limited',
+    company: 'Royal Swift Services Pvt. Ltd.',
     startDate: 'Sep 2024',
     endDate: 'Present',
     duration: 'Dubai, United Arab Emirates',
@@ -49,7 +49,7 @@ export const experiences: Experience[] = [
   {
     id: 'ayyan',
     title: 'Head of Business Development',
-    company: 'Ayyan Developer / Ayyan Associate',
+    company: 'Ayyan Developer & Associate',
     startDate: 'Sep 2019',
     endDate: 'Present',
     duration: 'Lahore, Pakistan',

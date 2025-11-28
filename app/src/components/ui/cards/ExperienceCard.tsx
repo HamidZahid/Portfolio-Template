@@ -25,7 +25,7 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
     >
       <div className="py-5 md:py-6">
         {/* Main Row - 4 columns */}
-        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_200px_auto] gap-3 md:gap-6 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[180px_1fr_280px_auto] gap-3 md:gap-8 items-center">
           {/* Column 1: Year Range */}
           <div className="text-gray-500 text-sm md:text-base font-normal order-1">
             {experience.startDate} — {experience.endDate}
@@ -37,7 +37,7 @@ export default function ExperienceCard({ experience, index }: ExperienceCardProp
           </div>
 
           {/* Column 3: Company Name with Logo */}
-          <div className="flex items-center gap-3 order-3">
+          <div className="flex items-center gap-3 order-3 whitespace-nowrap md:whitespace-normal">
             {experience.logo && (
               <div className="w-8 h-8 flex-shrink-0">
                 <Image
