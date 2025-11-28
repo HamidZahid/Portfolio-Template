@@ -1,9 +1,9 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { Testimonial } from '@/app/src/types';
-import { RefObject } from 'react';
+import { RefObject, useState, useEffect } from 'react';
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
@@ -12,6 +12,54 @@ interface TestimonialCardProps {
 }
 
 export default function TestimonialCard({ testimonial, index, containerRef }: TestimonialCardProps) {
+  // Cursor tracking for 3D rotation effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Smooth spring animations for cursor-based rotation
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), {
+    stiffness: 150,
+    damping: 15,
+  });
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), {
+    stiffness: 150,
+    damping: 15,
+  });
+
+  // Detect if device is mobile/touch
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Handle mouse movement for cursor interactivity
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isMobile) return;
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Normalize mouse position to -0.5 to 0.5 range
+    const normalizedX = (e.clientX - centerX) / rect.width;
+    const normalizedY = (e.clientY - centerY) / rect.height;
+    
+    mouseX.set(normalizedX);
+    mouseY.set(normalizedY);
+  };
+
+  const handleMouseLeave = () => {
+    if (isMobile) return;
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   // Scroll progress from container - each card triggers at different scroll positions
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -52,21 +100,33 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
     [0, 0, 0]
   );
 
-  // Consistent opacity transitions - third card stays visible at end
-  const opacityFadeEnd = index === 2 ? 1.0 : cardEnd + 0.15;
+  // Opacity transitions: Card 2 (index 2) must stay fully visible when scrolling down
+  // The issue: when scrolling down, scroll progress can exceed 1.0, causing opacity to drop
+  // Solution: extend opacity range well beyond 1.0 for Card 2
   const opacity = useTransform(
     scrollYProgress,
-    [
-      cardStart - 0.2, 
-      cardStart - 0.1, 
-      cardStart, 
-      cardEnd - 0.1,
-      cardEnd,
-      opacityFadeEnd
-    ],
     index === 2
-      ? [0, 0.4, 1, 1, 1, 1] // Third card: stays fully visible (no fade-out)
-      : [0, 0.4, 1, 1, 0.6, 0] // First two: standard fade-out
+      ? [
+          // Card 2: Fade in and stay fully visible even beyond scroll end (fixes scroll-down issue)
+          cardStart - 0.2,   // 0.46 - start fading in
+          cardStart - 0.1,   // 0.56 - mostly visible
+          cardStart,         // 0.66 - fully visible
+          cardEnd,           // 1.0 - still fully visible
+          1.2,               // 1.2 - still fully visible (handles scroll beyond end)
+          1.5,               // 1.5 - still fully visible (prevents any transparency when scrolling down)
+        ]
+      : [
+          // Cards 0 and 1: Fade in, then fade out when next card appears
+          cardStart - 0.2, 
+          cardStart - 0.1, 
+          cardStart, 
+          cardEnd - 0.1,
+          cardEnd,
+          cardEnd + 0.15
+        ],
+    index === 2
+      ? [0, 0.4, 1, 1, 1, 1] // Card 2: stays fully visible (opacity = 1.0 always, even beyond 1.0)
+      : [0, 0.4, 1, 1, 0.6, 0] // Cards 0 and 1: standard fade-out
   );
 
   // Minimal parallax effect for content - very subtle
@@ -91,16 +151,19 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
         scale,
         rotate,
         position: 'absolute',
-        top: 0,
+        top: index === 2 ? '60px' : 0, // Add margin-top for Card 3 to prevent overlap with Card 2
         left: 0,
         right: 0,
-        bottom: 0,
+        bottom: index === 2 ? '-60px' : 0, // Adjust bottom to maintain container height
         zIndex: index + 10, // Higher index = on top, with base offset for proper stacking
         willChange: 'transform, opacity',
+        perspective: '1000px',
       }}
       className="w-full h-full"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
-      <div
+      <motion.div
         className="rounded-2xl sm:rounded-3xl overflow-hidden h-full bg-[#f5f5f5] shadow-lg"
         style={{
           borderTop: `8px solid ${
@@ -111,6 +174,8 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
               : '#E8B44D' // Teal border → Yellow border
           }`,
           transformOrigin: 'center center', // Ensure scaling happens from center
+          rotateX: isMobile ? 0 : rotateX,
+          rotateY: isMobile ? 0 : rotateY,
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
@@ -187,7 +252,7 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
             </motion.div>
           )}
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

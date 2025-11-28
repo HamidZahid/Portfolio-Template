@@ -256,12 +256,15 @@ export default function Contact() {
             Go home
           </motion.a>
 
-          {/* Floating Arrow Cursor with Animation */}
+          {/* Floating Arrow Cursor with Animation - Left side pointing upward */}
           <motion.div 
-            className="absolute -top-6 -right-6 w-8 h-8 pointer-events-none"
+            className="absolute -top-6 -left-6 w-8 h-8 pointer-events-none"
+            style={{
+              rotate: -90, // Rotate to point upward
+            }}
             animate={{ 
-              x: [0, 5, 0],
-              y: [0, -3, 0]
+              x: [0, -3, 0], // Horizontal movement (left-right)
+              y: [0, -5, 0]  // Vertical movement (upward)
             }}
             transition={{ 
               x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
