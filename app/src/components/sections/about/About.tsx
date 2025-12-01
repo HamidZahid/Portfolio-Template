@@ -4,9 +4,13 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import type { MotionValue } from 'framer-motion';
 import Image from 'next/image';
 import { useMemo, useRef } from 'react';
+import { testimonials } from '@/app/src/constants';
+import TestimonialCard from '@/app/src/components/ui/cards/TestimonialCard';
+import { fadeInUp, staggerContainer } from '@/app/src/utils/animations';
 
 export default function About() {
   const textRef = useRef(null);
+  const testimonialsContainerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
   // Scroll progress for text animation
@@ -173,6 +177,55 @@ export default function About() {
           </motion.div>
         </div>
       </div>
+
+      {/* Testimonials Section */}
+      <div className="mt-20 md:mt-32">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            className="mb-8 sm:mb-10 md:mb-12 lg:mb-16 text-center"
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-3 sm:mb-4"
+            >
+              What my partners say
+            </motion.h2>
+          </motion.div>
+
+          {/* Cards container with optimized scroll space for smooth animations */}
+          <div ref={testimonialsContainerRef} className="relative" style={{ height: '140vh', minHeight: '800px', position: 'relative' }}>
+            <div className="sticky top-16 sm:top-20 w-full h-[500px] sm:h-[550px] md:h-[600px] lg:h-[700px]">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard
+                  key={testimonial.id}
+                  testimonial={testimonial}
+                  index={index}
+                  containerRef={testimonialsContainerRef}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-6 sm:mt-8 text-center">
+            <motion.a
+              href="https://www.linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 text-white rounded-full text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+            >
+              Read on Linkedin
+            </motion.a>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -185,7 +238,8 @@ type AnimatedWordProps = {
 };
 
 function AnimatedWord({ word, start, end, progress }: AnimatedWordProps) {
-  const opacity = useTransform(progress, [start, end], [0.3, 1]);
+  // Smooth opacity transition from 0 to 1 for better fade-in effect
+  const opacity = useTransform(progress, [start, end], [0, 1]);
 
   return (
     <motion.span style={{ opacity }} className="inline-block mr-[0.25em]">

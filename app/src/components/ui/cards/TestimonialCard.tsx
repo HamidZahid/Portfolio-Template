@@ -79,18 +79,18 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
     [0, 1]
   );
 
-  // Consistent slide up animation for all cards
+  // Smooth slide up animation for all cards
   const y = useTransform(
     cardProgress,
-    [0, 0.6, 1], // Same timing for all cards
+    [0, 0.5, 1], // Smoother timing
     ['100%', '0%', '0%']
   );
 
-  // Consistent scale animation for all cards
+  // Smooth scale animation for all cards
   const scale = useTransform(
     cardProgress,
-    [0, 0.4, 0.8, 1], // Same timing for all cards
-    [0.9, 1, 1, 0.95] // Same scale values for all cards
+    [0, 0.3, 0.7, 1], // Smoother timing
+    [0.95, 1, 1, 0.98] // More subtle scale values
   );
 
   // No rotation - cards stay perfectly aligned
@@ -100,33 +100,45 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
     [0, 0, 0]
   );
 
-  // Opacity transitions: Card 2 (index 2) must stay fully visible when scrolling down
-  // The issue: when scrolling down, scroll progress can exceed 1.0, causing opacity to drop
-  // Solution: extend opacity range well beyond 1.0 for Card 2
+  // Opacity transitions: Smooth fade in/out based on scroll progress
+  // Card 2 (index 2) must stay fully visible when scrolling down
   const opacity = useTransform(
     scrollYProgress,
     index === 2
       ? [
-        // Card 2: Fade in and stay fully visible even beyond scroll end (fixes scroll-down issue)
-        cardStart - 0.2,   // 0.46 - start fading in
-        cardStart - 0.1,   // 0.56 - mostly visible
-        cardStart,         // 0.66 - fully visible
-        cardEnd,           // 1.0 - still fully visible
-        1.2,               // 1.2 - still fully visible (handles scroll beyond end)
-        1.5,               // 1.5 - still fully visible (prevents any transparency when scrolling down)
+        // Card 2: Fade in and stay fully visible even beyond scroll end
+        cardStart - 0.15,   // Start fading in earlier
+        cardStart - 0.05,   // Mostly visible
+        cardStart,          // Fully visible
+        cardEnd,            // Still fully visible
+        1.1,                // Still fully visible (handles scroll beyond end)
       ]
       : [
         // Cards 0 and 1: Fade in, then fade out when next card appears
-        cardStart - 0.2,
-        cardStart - 0.1,
+        cardStart - 0.15,
+        cardStart - 0.05,
         cardStart,
         cardEnd - 0.1,
         cardEnd,
-        cardEnd + 0.15
+        cardEnd + 0.1
       ],
     index === 2
-      ? [0, 0.4, 1, 1, 1, 1] // Card 2: stays fully visible (opacity = 1.0 always, even beyond 1.0)
-      : [0, 0.4, 1, 1, 0.6, 0] // Cards 0 and 1: standard fade-out
+      ? [0, 0.5, 1, 1, 1] // Card 2: stays fully visible
+      : [0, 0.5, 1, 1, 0.3, 0] // Cards 0 and 1: smooth fade-out
+  );
+
+  // Dynamic z-index: Active card should be on top
+  // Higher opacity = higher z-index for proper stacking
+  // Using integer values for proper CSS z-index
+  const zIndex = useTransform(
+    opacity,
+    [0, 0.3, 0.7, 1],
+    [
+      index,           // When invisible, lowest z-index
+      index + 5,       // When partially visible
+      index + 8,       // When mostly visible
+      index + 10       // When fully visible, highest z-index
+    ]
   );
 
   // Minimal parallax effect for content - very subtle
@@ -150,12 +162,12 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
         opacity,
         scale,
         rotate,
+        zIndex,
         position: 'absolute',
-        top: index === 2 ? '60px' : 0, // Add margin-top for Card 3 to prevent overlap with Card 2
+        top: 0,
         left: 0,
         right: 0,
-        bottom: index === 2 ? '-60px' : 0, // Adjust bottom to maintain container height
-        zIndex: index + 10, // Higher index = on top, with base offset for proper stacking
+        bottom: 0,
         willChange: 'transform, opacity',
         perspective: '1000px',
       }}
