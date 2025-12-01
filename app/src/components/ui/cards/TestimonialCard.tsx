@@ -15,7 +15,7 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
   // Cursor tracking for 3D rotation effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
+
   // Smooth spring animations for cursor-based rotation
   const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), {
     stiffness: 150,
@@ -41,15 +41,15 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
   // Handle mouse movement for cursor interactivity
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isMobile) return;
-    
+
     const rect = e.currentTarget.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    
+
     // Normalize mouse position to -0.5 to 0.5 range
     const normalizedX = (e.clientX - centerX) / rect.width;
     const normalizedY = (e.clientY - centerY) / rect.height;
-    
+
     mouseX.set(normalizedX);
     mouseY.set(normalizedY);
   };
@@ -71,7 +71,7 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
   const cardStart = index * 0.33;
   const cardRange = 0.4; // Consistent range for all cards
   const cardEnd = index === 2 ? 1.0 : Math.min(cardStart + cardRange, 0.9);
-  
+
   // Map scroll progress to card-specific range with smooth easing
   const cardProgress = useTransform(
     scrollYProgress,
@@ -107,23 +107,23 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
     scrollYProgress,
     index === 2
       ? [
-          // Card 2: Fade in and stay fully visible even beyond scroll end (fixes scroll-down issue)
-          cardStart - 0.2,   // 0.46 - start fading in
-          cardStart - 0.1,   // 0.56 - mostly visible
-          cardStart,         // 0.66 - fully visible
-          cardEnd,           // 1.0 - still fully visible
-          1.2,               // 1.2 - still fully visible (handles scroll beyond end)
-          1.5,               // 1.5 - still fully visible (prevents any transparency when scrolling down)
-        ]
+        // Card 2: Fade in and stay fully visible even beyond scroll end (fixes scroll-down issue)
+        cardStart - 0.2,   // 0.46 - start fading in
+        cardStart - 0.1,   // 0.56 - mostly visible
+        cardStart,         // 0.66 - fully visible
+        cardEnd,           // 1.0 - still fully visible
+        1.2,               // 1.2 - still fully visible (handles scroll beyond end)
+        1.5,               // 1.5 - still fully visible (prevents any transparency when scrolling down)
+      ]
       : [
-          // Cards 0 and 1: Fade in, then fade out when next card appears
-          cardStart - 0.2, 
-          cardStart - 0.1, 
-          cardStart, 
-          cardEnd - 0.1,
-          cardEnd,
-          cardEnd + 0.15
-        ],
+        // Cards 0 and 1: Fade in, then fade out when next card appears
+        cardStart - 0.2,
+        cardStart - 0.1,
+        cardStart,
+        cardEnd - 0.1,
+        cardEnd,
+        cardEnd + 0.15
+      ],
     index === 2
       ? [0, 0.4, 1, 1, 1, 1] // Card 2: stays fully visible (opacity = 1.0 always, even beyond 1.0)
       : [0, 0.4, 1, 1, 0.6, 0] // Cards 0 and 1: standard fade-out
@@ -166,13 +166,12 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
       <motion.div
         className="rounded-2xl sm:rounded-3xl overflow-hidden h-full bg-[#f5f5f5] shadow-lg"
         style={{
-          borderTop: `8px solid ${
-            testimonial.borderColor === '#E8B44D' 
-              ? '#E85D9A' // Yellow border → Pink border
-              : testimonial.borderColor === '#E85D9A'
+          borderTop: `8px solid ${testimonial.borderColor === '#E8B44D'
+            ? '#E85D9A' // Yellow border → Pink border
+            : testimonial.borderColor === '#E85D9A'
               ? '#60D5D5' // Pink border → Teal border
               : '#E8B44D' // Teal border → Yellow border
-          }`,
+            }`,
           transformOrigin: 'center center', // Ensure scaling happens from center
           rotateX: isMobile ? 0 : rotateX,
           rotateY: isMobile ? 0 : rotateY,
@@ -180,7 +179,7 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
           {/* Content Column - Left side */}
-          <motion.div 
+          <motion.div
             style={{ y: contentY }}
             className={`${index === 2 ? 'p-8 sm:p-10 md:p-16 lg:p-20 mt-4 sm:mt-6 md:mt-8 lg:mt-10' : 'p-6 sm:p-8 md:p-12 lg:p-16'} flex flex-col justify-center order-2 md:order-1 min-h-[300px] sm:min-h-0`}
           >
@@ -237,7 +236,7 @@ export default function TestimonialCard({ testimonial, index, containerRef }: Te
 
           {/* Image Column - Right side */}
           {testimonial.image && (
-            <motion.div 
+            <motion.div
               style={{ y: imageY }}
               className="relative h-[250px] sm:h-[300px] md:h-full order-1 md:order-2"
             >

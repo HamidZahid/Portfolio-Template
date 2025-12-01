@@ -13,7 +13,7 @@ export default function Contact() {
   // Scroll detection for floating animation
   useEffect(() => {
     let scrollTimer: NodeJS.Timeout;
-    
+
     const handleScroll = () => {
       setIsScrolling(true);
       clearTimeout(scrollTimer);
@@ -39,11 +39,11 @@ export default function Contact() {
   const lahoreY = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
   const dropFollowY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
   const goHomeY = useTransform(scrollYProgress, [0, 0.5], [0, -15]);
-  
+
   // Smooth spring for floating
   const floatingY = useMotionValue(0);
   const springY = useSpring(floatingY, { stiffness: 50, damping: 15 });
-  
+
   useEffect(() => {
     if (!isScrolling) {
       floatingY.set(-15);
@@ -60,37 +60,37 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative min-h-screen flex items-center justify-center px-4 md:px-6 lg:px-8 py-20 md:py-32 overflow-x-hidden overflow-y-hidden bg-[#2d3139]"
+      className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-12 py-16 sm:py-20 md:py-24 lg:py-32 overflow-x-hidden overflow-y-hidden bg-[#2d3139]"
     >
-      {/* 3D Plus Sign - Top Left with bounce animation only - moved closer to center */}
+      {/* 3D Plus Sign - Left side floating - Hidden on mobile */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5, y: -50 }}
-        whileInView={{ 
-          opacity: 1, 
-          scale: 1, 
+        whileInView={{
+          opacity: 1,
+          scale: 1,
           y: [0, -10, 0],
           rotate: 0
         }}
         viewport={{ once: true }}
-        transition={{ 
+        transition={{
           opacity: { duration: 1, delay: 0.2, ease: [0.43, 0.13, 0.23, 0.96] },
           scale: { duration: 1, delay: 0.2, ease: [0.43, 0.13, 0.23, 0.96] },
           y: { duration: 2, delay: 1.2, repeat: Infinity, ease: "easeInOut" },
           rotate: { duration: 0 }
         }}
-        className="hidden md:block absolute top-12 left-[15%] md:left-[18%] lg:left-[20%] w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 z-10"
+        className="hidden lg:block absolute top-1/3 left-[8%] xl:left-[12%] w-28 h-28 lg:w-36 lg:h-36 xl:w-40 xl:h-40 z-10"
       >
         <Image
           src="/assets/images/hero_3.png"
           alt="Plus sign"
-          width={192}
-          height={192}
+          width={160}
+          height={160}
           className="w-full h-full object-contain opacity-80"
           unoptimized
         />
       </motion.div>
 
-      {/* 3D Map Pin - Bottom Left with bounce - moved closer to center */}
+      {/* 3D Map Pin - Bottom Left - Hidden on mobile */}
       <motion.div
         initial={{ opacity: 0, y: 100, scale: 0.5 }}
         whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -102,13 +102,13 @@ export default function Contact() {
           stiffness: 100,
           damping: 12
         }}
-        className="hidden md:block absolute left-[15%] md:left-[18%] lg:left-[20%] bottom-32 md:bottom-40 z-10"
+        className="hidden lg:block absolute left-[8%] xl:left-[12%] bottom-20 lg:bottom-24 xl:bottom-28 z-10"
       >
         <div className="relative flex flex-col items-center">
           <motion.div
             animate={{ y: [0, -15, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56"
+            className="w-36 h-36 lg:w-44 lg:h-44 xl:w-52 xl:h-52"
           >
             <Image
               src="/assets/images/hero_2.png"
@@ -120,14 +120,14 @@ export default function Contact() {
             />
           </motion.div>
 
-          {/* Lahore Button - centered below pin */}
+          {/* Lahore Button */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{ y: lahoreY }}
             transition={{ duration: 0.8, delay: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="absolute top-[105%] left-1/2 -translate-x-1/2 px-5 py-2.5 rounded-full bg-[#3d4149] text-white text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg min-w-[140px]"
+            className="absolute top-[100%] left-1/2 -translate-x-1/2 px-4 py-2 lg:px-5 lg:py-2.5 rounded-full bg-[#3d4149] text-white text-xs lg:text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg min-w-[120px] lg:min-w-[140px]"
             whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             onMouseEnter={() => setLahoreHovered(true)}
@@ -143,10 +143,10 @@ export default function Contact() {
               >
                 {lahoreHovered
                   ? new Date().toLocaleTimeString('en-US', {
-                      timeZone: 'Asia/Karachi',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })
+                    timeZone: 'Asia/Karachi',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })
                   : 'Lahore'}
               </motion.span>
             </AnimatePresence>
@@ -154,33 +154,33 @@ export default function Contact() {
         </div>
       </motion.div>
 
-      {/* Available for work - Top Right - moved closer to center */}
+      {/* Available for work - Top Center - Visible on all screens */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="hidden md:flex absolute top-12 md:top-16 right-[15%] md:right-[18%] lg:right-[20%] z-20 items-center gap-2"
+        className="flex absolute top-12 sm:top-16 md:top-20 lg:top-70 left-1/2 -translate-x-1/2 z-20 items-center gap-2 bg-white/5 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/10"
       >
         <motion.div
-          className="w-2 h-2 rounded-full bg-green-400"
+          className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400"
           animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
-        <span className="text-gray-300 text-sm">Available for work</span>
+        <span className="text-gray-300 text-xs sm:text-sm font-medium">Available for work</span>
       </motion.div>
 
-      {/* Drop me a follow Button - Top Right - moved closer to center with scroll animation */}
+      {/* Drop me a follow Button - Top Right - Hidden on mobile and tablet */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         style={{ y: dropFollowY }}
         transition={{ duration: 0.8, delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="hidden md:block absolute top-24 md:top-28 right-[15%] md:right-[18%] lg:right-[20%] z-20"
+        className="hidden lg:block absolute top-28 xl:top-32 right-[15%] xl:right-[18%] z-20"
       >
         <motion.button
-          className="px-5 py-2.5 rounded-full bg-[#3d4149] text-white text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg"
+          className="px-4 py-2 lg:px-5 lg:py-2.5 rounded-full bg-[#3d4149] text-white text-xs lg:text-sm font-medium hover:bg-[#4d5159] transition-colors shadow-lg"
           whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)" }}
           whileTap={{ scale: 0.95 }}
         >
@@ -188,29 +188,29 @@ export default function Contact() {
         </motion.button>
       </motion.div>
 
-      {/* 3D Hand - Right Side - Overflowing beyond right edge with thumbs up and floating animation */}
+      {/* 3D Hand - Right Side - Responsive sizing and positioning */}
       <motion.div
         initial={{ opacity: 0, x: 100, rotate: -20, scale: 0.8 }}
-        whileInView={{ 
-          opacity: 1, 
-          x: 0, 
+        whileInView={{
+          opacity: 1,
+          x: 0,
           rotate: [0, -8, 8, -5, 5, 0],
           scale: [0.8, 1.08, 1, 1.03, 1]
         }}
         viewport={{ once: true }}
-        style={{ 
+        style={{
           y: isScrolling ? 0 : springY,
-          right: '-13%',
-          bottom: '10%',
+          right: '-15%',
+          bottom: '8%',
           willChange: 'transform, opacity',
           transformOrigin: 'center center'
         }}
-        transition={{ 
+        transition={{
           opacity: { duration: 1, delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] },
           x: { duration: 1, delay: 0.5, ease: [0.43, 0.13, 0.23, 0.96] },
-          rotate: { 
-            duration: 1.2, 
-            delay: 1.5, 
+          rotate: {
+            duration: 1.2,
+            delay: 1.5,
             ease: [0.34, 1.56, 0.64, 1],
             times: [0, 0.3, 0.6, 0.8, 0.95, 1]
           },
@@ -221,7 +221,7 @@ export default function Contact() {
             times: [0, 0.3, 0.6, 0.8, 1]
           }
         }}
-        className="hidden md:block absolute right-0 top-1/4 bottom-16 md:bottom-20 lg:bottom-24 w-[40rem] h-[40rem] md:w-[50rem] md:h-[50rem] lg:w-[60rem] lg:h-[60rem] xl:w-[70rem] xl:h-[70rem] z-10"
+        className="hidden sm:block absolute right-0 w-[30rem] h-[30rem] sm:w-[35rem] sm:h-[35rem] md:w-[45rem] md:h-[45rem] lg:w-[55rem] lg:h-[55rem] xl:w-[65rem] xl:h-[65rem] z-10"
       >
         <Image
           src="/assets/images/hand.png"
@@ -233,19 +233,19 @@ export default function Contact() {
         />
       </motion.div>
 
-      {/* Go home Button - Bottom Right - moved closer to center with scroll animation */}
+      {/* Go home Button - Bottom Right - Hidden on mobile */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         style={{ y: goHomeY }}
         transition={{ duration: 0.8, delay: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="hidden md:block absolute bottom-16 md:bottom-24 right-[15%] md:right-[18%] lg:right-[20%] z-20"
+        className="hidden md:block absolute bottom-16 md:bottom-20 lg:bottom-24 right-[15%] lg:right-[18%] xl:right-[20%] z-20"
       >
         <div className="relative">
           <motion.a
             href="#hero"
-            className="px-6 py-3 rounded-full bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors shadow-lg inline-flex items-center gap-2"
+            className="px-5 py-2.5 md:px-6 md:py-3 rounded-full bg-blue-500 text-white text-xs md:text-sm font-medium hover:bg-blue-600 transition-colors shadow-lg inline-flex items-center gap-2"
             whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(59, 130, 246, 0.4)" }}
             whileTap={{ scale: 0.95 }}
             onClick={(e) => {
@@ -256,17 +256,17 @@ export default function Contact() {
             Go home
           </motion.a>
 
-          {/* Floating Arrow Cursor with Animation - Left side pointing upward */}
-          <motion.div 
-            className="absolute -top-6 -left-6 w-8 h-8 pointer-events-none"
+          {/* Floating Arrow Cursor */}
+          <motion.div
+            className="absolute -top-5 -left-5 md:-top-6 md:-left-6 w-6 h-6 md:w-8 md:h-8 pointer-events-none"
             style={{
-              rotate: -90, // Rotate to point upward
+              rotate: -90,
             }}
-            animate={{ 
-              x: [0, -3, 0], // Horizontal movement (left-right)
-              y: [0, -5, 0]  // Vertical movement (upward)
+            animate={{
+              x: [0, -3, 0],
+              y: [0, -5, 0]
             }}
-            transition={{ 
+            transition={{
               x: { duration: 2, repeat: Infinity, ease: "easeInOut" },
               y: { duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
             }}
@@ -282,8 +282,8 @@ export default function Contact() {
         </div>
       </motion.div>
 
-      {/* Main Content - Center with stagger animation */}
-      <div className="relative z-10 text-center max-w-5xl mx-auto">
+      {/* Main Content - Center - Fully responsive */}
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6">
         <motion.div
           variants={staggerContainer}
           initial="hidden"
@@ -295,9 +295,9 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-8"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-4 sm:mb-5 md:mb-6"
           >
-            Let&apos;s build your next development or export corridor.
+            Let&apos;s create something<br />great together.
           </motion.h2>
 
           <motion.p
@@ -305,10 +305,9 @@ export default function Contact() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
-            className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto"
+            className="text-base sm:text-lg md:text-xl text-gray-400 mb-8 sm:mb-10 max-w-xl mx-auto px-2"
           >
-            From Lahore housing colonies to GCC-ready export lanes and environmental programs, I coordinate the
-            partners, approvals, and compliance that keep deals moving. Reach out any time at abrehmanewm@gmail.com.
+            I&apos;m not just here to design products;<br />I&apos;m here to connect with people.
           </motion.p>
 
           <motion.div
@@ -320,14 +319,14 @@ export default function Contact() {
           >
             <motion.a
               href="mailto:abrehmanewm@gmail.com"
-              className="px-12 py-5 rounded-full bg-white text-black text-lg font-semibold hover:bg-gray-100 transition-colors shadow-2xl"
+              className="px-8 py-3 sm:px-10 sm:py-4 rounded-full bg-white text-black text-base sm:text-lg font-bold hover:bg-gray-100 transition-colors shadow-2xl"
               whileHover={{
-                scale: 1.08,
-                boxShadow: "0 25px 50px rgba(255, 255, 255, 0.2)"
+                scale: 1.05,
+                boxShadow: "0 20px 40px rgba(255, 255, 255, 0.2)"
               }}
               whileTap={{ scale: 0.95 }}
             >
-              Email Abdul
+              Let&apos;s talk!
             </motion.a>
           </motion.div>
         </motion.div>
