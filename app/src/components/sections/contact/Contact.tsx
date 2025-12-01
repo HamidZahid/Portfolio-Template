@@ -221,7 +221,7 @@ export default function Contact() {
             times: [0, 0.3, 0.6, 0.8, 1]
           }
         }}
-        className="hidden sm:block absolute right-0 w-[30rem] h-[30rem] sm:w-[35rem] sm:h-[35rem] md:w-[45rem] md:h-[45rem] lg:w-[55rem] lg:h-[55rem] xl:w-[65rem] xl:h-[65rem] z-10"
+        className="hidden sm:block absolute top-40 right-0 w-[30rem] h-[30rem] sm:w-[35rem] sm:h-[35rem] md:w-[45rem] md:h-[45rem] lg:w-[55rem] lg:h-[55rem] xl:w-[65rem] xl:h-[65rem] z-10"
       >
         <Image
           src="/assets/images/hand.png"
